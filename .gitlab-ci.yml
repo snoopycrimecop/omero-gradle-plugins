@@ -24,8 +24,8 @@ cache:
 #  policy: push
   paths:
     - .gradle
-    - */.gradle
-    - */build
+    - ./*-*/.gradle
+    - ./*-*/build
     - .m2
 
 build:
@@ -34,8 +34,7 @@ build:
     - gradle publishToMavenLocal
   artifacts:
     paths:
-      - omero-*/build/libs/*.jar
-      - omero-gradle-plugins/omero-*/build/libs/*.jar
+      - ./*-*/build/libs/*.jar
     expire_in: 1 week
   # only:
   #   - master
