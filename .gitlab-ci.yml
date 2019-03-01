@@ -1,0 +1,46 @@
+# Based on
+#   https://gist.github.com/daicham/5ac8461b8b49385244aa0977638c3420
+#   https://gitlab.com/gitlab-org/gitlab-ce/blob/7d1216016cfc64e35955249e39c46615e2dbdf93/lib/gitlab/ci/templates/Gradle.gitlab-ci.yml
+#image: java:8-jdk
+#image: gradle:5.2.1-jdk8
+image: docker.io/manics/omero-build-gradle
+
+variables:
+  # Clone submodules
+  GIT_SUBMODULE_STRATEGY: recursive
+  GRADLE_OPTS: "-Dorg.gradle.daemon=false"
+
+stages:
+  - build
+  - package
+
+before_script:
+  - export GRADLE_USER_HOME=`pwd`/.gradle
+  - mkdir -p "$CI_PROJECT_DIR/.m2" && ln -sf "$CI_PROJECT_DIR/.m2" ~/.m2
+  - ./gitlab/patch-repositories.sh
+
+cache:
+  key: "$CI_COMMIT_REF_NAME"
+#  policy: push
+  paths:
+    - .gradle
+    - */.gradle
+    - */build
+    - .m2
+
+build:
+  stage: build
+  script:
+    - gradle publishToMavenLocal
+  artifacts:
+    paths:
+      - omero-*/build/libs/*.jar
+      - omero-gradle-plugins/omero-*/build/libs/*.jar
+    expire_in: 1 week
+  # only:
+  #   - master
+
+package:
+  stage: package
+  script:
+    - gradle publishPluginMavenPublicationToGitlabRepository

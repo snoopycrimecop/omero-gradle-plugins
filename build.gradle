@@ -14,6 +14,12 @@ task publishToMavenLocal {
     dependsOn gradle.includedBuilds*.task(':publishToMavenLocal')
 }
 
+task publishPluginMavenPublicationToGitlabRepository {
+    group "omero"
+    description "Calls publishPluginMavenPublicationToGitlabRepository on all subprojects"
+    dependsOn gradle.includedBuilds*.task(':publishPluginMavenPublicationToGitlabRepository')
+}
+
 task build {
     group "omero"
     description "Calls build on all subprojects"
