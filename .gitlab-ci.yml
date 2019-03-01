@@ -42,4 +42,4 @@ build:
 package:
   stage: package
   script:
-    - gradle publishPluginMavenPublicationToGitlabRepository
+    - gradle publishPluginMavenPublicationToCustomRepository
