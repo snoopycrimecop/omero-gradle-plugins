@@ -16,7 +16,7 @@ pipeline {
         MAVEN_REPO_URL  = 'http://nexus:8081/nexus/repository/maven-internal/'
 
         // Disable Gradle daemon
-        GRADLE_OPTS = '-Dorg.gradle.daemon=false'
+        GRADLE_OPTS = '-Dorg.gradle.daemon=false  -Dorg.gradle.java.home=//etc/alternatives/java_sdk_11'
     }
 
     stages {
